@@ -1,37 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Heart, Music, Volume2, VolumeX, Sparkles, Stars } from 'lucide-react';
-import { render } from 'ai/rsc'
-import OpenAI from 'openai'
-import { z } from 'zod'
 
-const openai = new OpenAI()
-
-async function submitMessage(userInput) { 
-  'use server'
-
-  return render({
-    provider: openai,
-    model: 'gpt-4-0125-preview',
-    messages: [
-      { role: 'system', content: 'You are a helpful assistant' },
-      { role: 'user', content: userInput }
-    ],
-    text: ({ content }) => <p>{content}</p>,
-    tools: {
-      get_city_weather: {
-        description: 'Get the current weather for a city',
-        parameters: z.object({
-          city: z.string().describe('the city')
-        }).required(),
-        render: async function* ({ city }) {
-          yield <Spinner/>
-          const weather = await getWeather(city)
-          return <Weather info={weather} />
-        }
-      }
-    }
-  })
-}
 
 const ValentinesDay = () => {
   const [showMessage, setShowMessage] = useState(false);
@@ -198,7 +167,6 @@ const ValentinesDay = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-pink-200/50 via-red-100/50 to-rose-200/50 animate-pulse" />
       </div>
 
-      submitMessage
       {/* Floating sparkles */}
       {sparkles.map(sparkle => (
         <div
